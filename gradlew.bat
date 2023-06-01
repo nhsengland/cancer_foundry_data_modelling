@@ -69,7 +69,7 @@ if "%JEMMA%" == "" (
   if ["%GRADLE_OPTS%"]==[""] set GRADLE_OPTS=
   set GRADLE_OPTS=%GRADLE_OPTS% !wrapperAuthGradleOptions!
 
-  set transformsGradleDistributionUrl=!ORG_GRADLE_PROJECT_artifactsUri!/repositories/ri.gradle.distributions.artifacts.repository/contents/release/files/gradle-7.5.1-bin.zip
+  set transformsGradleDistributionUrl=!ORG_GRADLE_PROJECT_artifactsUri!/repositories/ri.gradle.distributions.artifacts.repository/contents/release/files/gradle-7.6-bin.zip
 )
 
 set input_filename=%root_dir%/gradle/wrapper/gradle-wrapper.template.properties
@@ -84,6 +84,7 @@ set output_filename=%root_dir%/gradle/wrapper/gradle-wrapper.properties
 
 set DIRNAME=%~dp0
 if "%DIRNAME%"=="" set DIRNAME=.
+@rem This is normally unused
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 

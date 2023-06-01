@@ -14,7 +14,7 @@ java-version: java_17
 
 env:
   transformsGradleDistributionUrl:
-    uri-role: gradle-distribution-7-5-1
+    uri-role: gradle-distribution-7-6
   ORG_GRADLE_PROJECT_transformsBuildUriV2:
     uri-role: build2-api
   ORG_GRADLE_PROJECT_transformsCompassUri:
@@ -33,6 +33,8 @@ env:
     uri-role: mamba-installer2
   ORG_GRADLE_PROJECT_mambaInstaller3:
     uri-role: mamba-installer3
+  ORG_GRADLE_PROJECT_mambaInstaller8:
+    uri-role: mamba-installer8
   ORG_GRADLE_PROJECT_transformsCondaRepositoryProxyApiUri:
     uri-role: conda-repository-proxy-authz-api
   ORG_GRADLE_PROJECT_transformsCondaRepositoryProxyPublicRepoUri:

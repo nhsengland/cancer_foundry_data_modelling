@@ -15,7 +15,7 @@ if (hasProperty('artifactsUri')) {
         }
         remote(HttpBuildCache) {
             enabled = !System.getenv().containsKey("JEMMA_RUN_WITHOUT_CACHES")
-            push = System.getenv().containsKey("CI")
+            push = System.getenv().containsKey("JEMMA") || System.getenv().containsKey("CA")
             url = "${artifactsUri}/repositories/${transformsRepoRid}/contents/release/gradle/"
             credentials {
                 username = ''
