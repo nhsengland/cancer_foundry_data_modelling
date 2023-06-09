@@ -7,13 +7,19 @@ from myproject.datasets.config import list_categorical_variables, list_boolean_v
 @transform_df(
     Output("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
     patient=Input("ri.foundry.main.dataset.b2a84252-8ae1-4f7c-9948-c7e00afe36a8"),
-
+    dataset_111_calls=Input("ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1")
 )
-def compute(patient):
+def compute(patient, dataset_111_calls):
     """
     Add features to the patient table from the Person Ontology
-    Features to be added: demographic, geographic, GP practice   
+    Features to be added: demographic, geographic, GP practice
+
+    Merge features from 111 calls
     """
+    # left join 111 dataset
+    patient = patient.join(dataset_111_calls,
+                           "patient_pseudo_id",
+                           "left")
 
     # Age column: replace ages over 113 with None
     patient = patient.withColumn("age_clean", F.when(patient.age <= 113, patient.age)\

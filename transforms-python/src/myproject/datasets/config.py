@@ -1,3 +1,8 @@
+# define cut-off date
+date_cutoff = "2022-01-01"
+
+weeks_to_subtract = [4, 12, 26, 52, 260]
+
 # categorical variables from which to create binary variables in patient_features
 list_categorical_variables = [
     "gender",
