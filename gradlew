@@ -68,6 +68,7 @@
 set -euo pipefail
 
 root_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+gradle_dist="gradle-7.6-bin.zip"
 
 if [ -z "${JEMMA:-}" ];
 then
@@ -107,9 +108,12 @@ then
     wrapperAuthGradleOptions="-Dgradle.wrapperUser=${GIT_REMOTE_USERNAME} -Dgradle.wrapperPassword=${ORG_GRADLE_PROJECT_transformsBearerToken}"
     export GRADLE_OPTS="${GRADLE_OPTS:-} ${wrapperAuthGradleOptions}"
 
-    transformsGradleDistributionUrl="${ORG_GRADLE_PROJECT_artifactsUri}/repositories/ri.gradle.distributions.artifacts.repository/contents/release/files/gradle-7.6-bin.zip"
+    transformsGradleDistributionUrl="${ORG_GRADLE_PROJECT_artifactsUri}/repositories/ri.gradle.distributions.artifacts.repository/contents/release/files/${gradle_dist}"
 fi
 
+if [[ "${STATIC_GRADLE_BINARY_URI:-}" ]] && [[ "$STATIC_GRADLE_BINARY_URI" == *"$gradle_dist"* ]]; then
+  transformsGradleDistributionUrl="$STATIC_GRADLE_BINARY_URI"
+fi
 sed -e "s|\${transformsGradleDistributionUrl}|${transformsGradleDistributionUrl}|g" "${root_dir}/gradle/wrapper/gradle-wrapper.template.properties" > "${root_dir}/gradle/wrapper/gradle-wrapper.properties"
 
 set +euo pipefail
