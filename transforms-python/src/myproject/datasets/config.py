@@ -21,3 +21,9 @@ list_boolean_variables = [
         "living_with_elderly",
         "private_outdoor_space",
     ]
+
+# the ICD10 codes (using % magic character) for each grouping
+# Add multiple ICD10 codes to the list
+dict_icd10_groups = {"digestive_system_diseases": ["K%"],
+                     "family_history_cancer": ["Z80%"],
+                     }

@@ -5,6 +5,21 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/comorbidity_features"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/inpatient_comorbidities"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/111_pathways_features"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"
 - alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/patient_health_record_features"
   modes:
   - "BUILD"
@@ -15,6 +30,11 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"
+- alias: "ri.foundry.main.dataset.793b42d6-f24d-4cca-b500-abc319dd5162"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.793b42d6-f24d-4cca-b500-abc319dd5162"
 - alias: "ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"
   modes:
   - "READ"
@@ -35,6 +55,16 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.bc82a106-d0b2-4837-9d46-1aabcb4db0d2"
+- alias: "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
+- alias: "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
 - alias: "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
   modes:
   - "READ"

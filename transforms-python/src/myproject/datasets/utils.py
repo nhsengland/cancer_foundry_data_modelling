@@ -1,4 +1,7 @@
 import pyspark.sql.functions as F
+from pyspark.sql.window import Window
+import datetime
+from myproject.datasets.config import date_cutoff, weeks_to_subtract
 import datetime
 
 
@@ -28,12 +31,54 @@ def create_expressions_categorical_column(df, col_name: str):
 def clean_categorical_column_return_expressions(df, col_name: str,fill_string: str = 'unknown',append_to_col_name: str = '_null_removed'):
     """
     First clean the categorical column (replacing null and emppty strings)
-    Returns expression for the dummy variables 
+    Returns expression for the dummy variables
     """
     df = clean_column_of_strings(df, col_name, fill_string)
     categories_exprs = create_expressions_categorical_column(df, col_name + append_to_col_name)
 
     return categories_exprs
+
+
+def create_comorbidity_features(df_specific_comorbidity, name_of_group):
+    """
+    Input: dataframe which is already filtered to one diagnosis or set of diagnoses
+    Identify the first and last date when the diagnosis was recorded
+    Create output table, one row per ID
+    Create binary flag to indicate presence of the group of diagnoses
+    Identify if the first diagnosis was made in the last n weeks  
+    """
+    df_specific_comorbidity = df_specific_comorbidity.withColumnRenamed("diagnosis", name_of_group)
+
+    # identify earliest date
+    w_asc = Window.partitionBy("patient_pseudo_id").orderBy(F.col("date").asc())
+    specific_comorbidity_first = df_specific_comorbidity.withColumn("row", F.row_number().over(w_asc)).filter(F.col("row") == 1).drop("row")
+    specific_comorbidity_first = specific_comorbidity_first.withColumnRenamed("date", name_of_group+"_date_earliest")
+
+    # identify latest date
+    w_desc = Window.partitionBy("patient_pseudo_id").orderBy(F.col("date").desc())
+    specific_comorbidity_latest = df_specific_comorbidity.withColumn("row", F.row_number().over(w_desc)).filter(F.col("row") == 1).drop("row")
+    specific_comorbidity_latest = specific_comorbidity_latest.withColumnRenamed("date", name_of_group+"_date_latest")
+
+    # merge
+    specific_comorbidity_feature = specific_comorbidity_first.join(specific_comorbidity_latest,
+                                                                    ["patient_pseudo_id", name_of_group],
+                                                                    "left")
+
+
+    # make binary column
+    specific_comorbidity_feature = specific_comorbidity_feature.withColumn(name_of_group+"_binary", F.lit(1))
+
+    # if earliest was in last 1 month, 6 months, 12 months or more
+
+    for weeks in weeks_to_subtract:
+        subtracted_date = subtract_n_weeks_from_date(date_cutoff, weeks)
+
+        specific_comorbidity_feature = specific_comorbidity_feature.withColumn(name_of_group+"_in_last_"+str(weeks)+"_weeks",
+                                                                            F.when( (F.col(name_of_group+"_date_earliest")>subtracted_date) &
+                                                                            (F.col(name_of_group+"_date_earliest")<date_cutoff), 1)
+                                                                            .otherwise(0))
+
+    return specific_comorbidity_feature
 
 
 def number_calls_during_time_period(df, date:str, num_weeks_to_subtract:int, variable_name_prefix:str = "111_calls_last_", groupbycols = ["patient_pseudo_id"]):
