@@ -25,6 +25,11 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
+- alias: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
 - alias: "ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"
   modes:
   - "BUILD"
