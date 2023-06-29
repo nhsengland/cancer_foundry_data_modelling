@@ -126,6 +126,41 @@ def number_symptom_calls_during_time_period(df,
 
     return symptom_count
 
+def number_OPA_during_time_period(df,
+                                  date: str,
+                                  num_weeks_to_subtract: int,
+                                  variable_name_prefix: str = "OPA_attendances_last_",
+                                  groupbycols: str = ["patient_pseudo_id"]):
+    """
+    Returns the number of outpatient attendances in the period between
+    the given date - number_weeks_to_subtract until
+    the latest data present in the dataset
+    """
+    date_limit = subtract_n_weeks_from_date(date, num_weeks_to_subtract)
+    df_limited = df.filter(F.col("attendance_date") >= F.lit(date_limit))
+
+    col_alias = variable_name_prefix + str(num_weeks_to_subtract) + "_weeks"
+    total_number_OPA_in_period = df_limited.groupBy(groupbycols).count().withColumnRenamed("count", col_alias)
+
+    return total_number_OPA_in_period
+
+def number_AE_during_time_period(df,
+                                 date: str,
+                                 num_weeks_to_subtract: int,
+                                 variable_name_prefix: str = "AE_attendances_last_",
+                                 groupbycols: str = ["patient_pseudo_id"]):
+    """
+    Returns the number of emergency attendances in the period between
+    the given date - number_weeks_to_subtract until
+    the latest data present in the dataset
+    """
+    date_limit = subtract_n_weeks_from_date(date, num_weeks_to_subtract)
+    df_limited = df.filter(F.col("attendance_date") >= F.lit(date_limit))
+
+    col_alias = variable_name_prefix + str(num_weeks_to_subtract) + "_weeks"
+    total_number_AE_in_period = df_limited.groupBy(groupbycols).count().withColumnRenamed("count", col_alias)
+
+    return total_number_AE_in_period
 
 def subtract_n_weeks_from_date(original_date: str, num_weeks_to_subtract: int):
     """
