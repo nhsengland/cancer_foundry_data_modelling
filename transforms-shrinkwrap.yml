@@ -5,6 +5,12 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/cancer_diagnosis"
+  modes:
+  - "BUILD"
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.57b3da18-8389-4083-bb74-499bb3208f04"
 - alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/comorbidity_features"
   modes:
   - "BUILD"
@@ -15,16 +21,36 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/outpatient_activity_with_diagnosis"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/outpatient_comorbidities"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"
 - alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/patient_health_record_features"
   modes:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
+- alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/sus_opa_raw_unioned"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.c3f3cfb4-0e3b-44e1-a1c4-a10c0c463ae2"
 - alias: "ri.foundry.main.dataset.0cc8c784-f957-47b5-9844-a69d7eee0f6a"
   modes:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.0cc8c784-f957-47b5-9844-a69d7eee0f6a"
+- alias: "ri.foundry.main.dataset.10e87cda-7bbc-4d0c-a8b3-c2559b832dd3"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.10e87cda-7bbc-4d0c-a8b3-c2559b832dd3"
 - alias: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
   modes:
   - "READ"
@@ -35,6 +61,11 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"
+- alias: "ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3"
 - alias: "ri.foundry.main.dataset.3b5c090a-bad0-4568-9163-d37a41c748e1"
   modes:
   - "BUILD"
@@ -46,6 +77,16 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.4725c357-f053-498d-9113-127bde5edc55"
+- alias: "ri.foundry.main.dataset.5ce08265-84ab-4d90-a38a-df31e47ecb47"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.5ce08265-84ab-4d90-a38a-df31e47ecb47"
+- alias: "ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"
 - alias: "ri.foundry.main.dataset.793b42d6-f24d-4cca-b500-abc319dd5162"
   modes:
   - "READ"
@@ -71,6 +112,26 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.bc82a106-d0b2-4837-9d46-1aabcb4db0d2"
+- alias: "ri.foundry.main.dataset.c12f6390-def6-4fa4-bb51-1e70e3ac1c20"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.c12f6390-def6-4fa4-bb51-1e70e3ac1c20"
+- alias: "ri.foundry.main.dataset.c3f3cfb4-0e3b-44e1-a1c4-a10c0c463ae2"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.c3f3cfb4-0e3b-44e1-a1c4-a10c0c463ae2"
+- alias: "ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"
+- alias: "ri.foundry.main.dataset.e5ca6fce-6839-4b1d-801c-81e2e976c5bd"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e5ca6fce-6839-4b1d-801c-81e2e976c5bd"
 - alias: "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
   modes:
   - "READ"
@@ -81,6 +142,11 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.f0e0629f-e190-40fa-a7c3-a95ce8d2fe6a"
+- alias: "ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"
 - alias: "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
   modes:
   - "READ"

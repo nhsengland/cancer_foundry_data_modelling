@@ -1,5 +1,5 @@
 # define cut-off date
-date_cutoff = "2022-01-01"
+date_cutoff = "2021-08-31"
 
 weeks_to_subtract = [4, 12, 26, 52, 260]
 
@@ -106,3 +106,30 @@ list_patient_health_record_variables = [
 dict_icd10_groups = {"digestive_system_diseases": ["K%"],
                      "family_history_cancer": ["Z80%"],
                      }
+
+diagnosis_columns_opa = [
+    "Primary_Diagnosis_Code",
+    "Secondary_Diagnosis_Code_1",
+    "Secondary_Diagnosis_Code_2",
+    "Secondary_Diagnosis_Code_3",
+    "Secondary_Diagnosis_Code_4",
+    "Secondary_Diagnosis_Code_5",
+    "Secondary_Diagnosis_Code_6",
+    "Secondary_Diagnosis_Code_7",
+    "Secondary_Diagnosis_Code_8",
+    "Secondary_Diagnosis_Code_9",
+    "Secondary_Diagnosis_Code_10",
+    "Secondary_Diagnosis_Code_11",
+    "Secondary_Diagnosis_Code_12",
+    "Secondary_Diagnosis_Code_13",
+    "Secondary_Diagnosis_Code_14",
+    "Secondary_Diagnosis_Code_15",
+    "Secondary_Diagnosis_Code_16",
+    "Secondary_Diagnosis_Code_17",
+    "Secondary_Diagnosis_Code_18",
+    "Secondary_Diagnosis_Code_19",
+    "Secondary_Diagnosis_Code_20",
+    "Secondary_Diagnosis_Code_21",
+    "Secondary_Diagnosis_Code_22",
+    "Secondary_Diagnosis_Code_23",
+    ]

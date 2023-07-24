@@ -1,6 +1,6 @@
 from pyspark.sql import functions as F
 from transforms.api import transform_df, Input, Output
-
+from myproject.datasets import utils
 
 @transform_df(
     Output("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/inpatient_comorbidities"),
@@ -8,32 +8,15 @@ from transforms.api import transform_df, Input, Output
 )
 def compute(inpatient_activity):
     """
-    Create a table of diagnoses and the date from the inpatient dataset
+    Create a table of inpatient diagnoses and the date from the inpatient dataset
     """
+    inpatient_activity = inpatient_activity.select("patient_pseudo_id", "attendance_date", "dimention_8")
 
-    df_comorbidity = inpatient_activity.select("patient_pseudo_id", "attendance_date", "dimention_8")
+    inpatient_activity = inpatient_activity.withColumn("dimention_8_array", F.split(F.col("dimention_8"), ","))
 
-    df_comorbidity = df_comorbidity.withColumn("dimention_8_array", F.split(F.col("dimention_8"), ","))
+    df_comorbidity_inpatient = utils.create_long_list_diagnoses_from_activity(df_activity=inpatient_activity,
+                                                                              array_column="dimention_8_array")
 
-    df_comorbidity = df_comorbidity.withColumn("diagnosis",
-                                               F.explode(F.col("dimention_8_array")))
+    df_comorbidity_inpatient = df_comorbidity_inpatient.withColumn("source", F.lit("Inpatient"))
 
-    # remove rows with empty space
-    df_comorbidity = df_comorbidity.filter(F.col("diagnosis") != '')
-
-    # trim whitespace
-    df_comorbidity = df_comorbidity.withColumn("diagnosis", F.trim(F.col("diagnosis")))
-
-    # replace space and vertical bar (|) with empty string
-    df_comorbidity = df_comorbidity.withColumn("diagnosis", F.regexp_replace("diagnosis", " |\|", ""))
-
-    # rename attendance date to date for consistency
-    df_comorbidity = df_comorbidity.withColumnRenamed("attendance_date", "date")
-
-    # remove null diagnosis
-    df_comorbidity = df_comorbidity.filter(F.col("diagnosis").isNotNull())
-
-    # remove empty string
-    df_comorbidity = df_comorbidity.filter(F.col("diagnosis") != "")
-
-    return df_comorbidity.select("patient_pseudo_id", "date", "diagnosis")
+    return df_comorbidity_inpatient.select("patient_pseudo_id", "date", "diagnosis", "source")

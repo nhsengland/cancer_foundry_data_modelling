@@ -6,15 +6,16 @@ from myproject.datasets.config import (list_categorical_variables,
                                        list_boolean_variables,
                                        list_patient_health_record_variables,
                                        list_categorical_variables_from_phr)
-
 @transform_df(
     Output("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
     patient=Input("ri.foundry.main.dataset.b2a84252-8ae1-4f7c-9948-c7e00afe36a8"),
     dataset_111_calls=Input("ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"),
+    patient_health_record_features=Input("ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"),
+    comorbidity_features=Input("ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"),
+    cancer_diagnosis=Input("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/cancer_diagnosis"),
     ae_features=Input("ri.foundry.main.dataset.3b5c090a-bad0-4568-9163-d37a41c748e1"),
-    patient_health_record_features=Input("ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78")
 )
-def compute(patient, dataset_111_calls, ae_features, patient_health_record_features):
+def compute(patient, dataset_111_calls, ae_features, patient_health_record_features, comorbidity_features, cancer_diagnosis):
     """
     Add features to the patient table from the Person Ontology
     Features to be added: demographic, geographic, GP practice, A&E attendances
@@ -22,11 +23,23 @@ def compute(patient, dataset_111_calls, ae_features, patient_health_record_featu
     Merge features from 111 calls
     Merge features from patient health record features
     Merge features from AE features
+    Merge features from comorbidity features
+    Merge features from cancer_diagnosis
     """
     # 111 CALLS
 
     # left join 111 dataset
     patient = patient.join(dataset_111_calls,
+                           "patient_pseudo_id",
+                           "left")
+
+    # Comorbidity features
+    patient = patient.join(comorbidity_features,
+                           "patient_pseudo_id",
+                           "left")
+
+    # cancer features
+    patient = patient.join(cancer_diagnosis,
                            "patient_pseudo_id",
                            "left")
 
