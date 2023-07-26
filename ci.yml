@@ -69,6 +69,8 @@ env:
     uri-role: foundry-telemetry-service-api
   ORG_GRADLE_PROJECT_magritteCoordinatorUri:
     uri-role: magritte-coordinator-api
+  ORG_GRADLE_PROJECT_magritteCoordinatorCiUri:
+    uri-role: magritte-coordinator-ci-api
   ORG_GRADLE_PROJECT_stemmaGit:
     uri-role: stemma-git
   ORG_GRADLE_PROJECT_transformsWorkerUri:
@@ -113,7 +115,6 @@ jobs:
       condaLocksMinVersion=${JEMMA_CONDA_LOCKS_MIN_VERSION:-0}
       if [ "$condaLocksVersion" -ge "$condaLocksMinVersion" ];
       then
-        export ORG_GRADLE_PROJECT_useCondaLocksForPlatforms="linux-64,windows,osx-64,free-bsd,unix,solaris"
         export ORG_GRADLE_PROJECT_applyCondaLocksPatch="true";
       fi
 
