@@ -28,12 +28,12 @@ def compute(df_emergency_activity):
     # loop through "weeks_to_subtract". Calculate the number of attendances in each period. Merge to dataset_ae_attend
     for weeks in weeks_to_subtract:
         # get the number of emergency attendances in the specified period
-        total_number_AE_in_period = utils.number_AE_during_time_period(df=df_emergency_activity,
-                                                                       date=date_cutoff,
-                                                                       num_weeks_to_subtract=weeks,
-                                                                       variable_name_prefix="ae_attendances_last_",
-                                                                       groupbycols=["patient_pseudo_id"]
-                                                                       )
+        total_number_AE_in_period = utils.number_attendances_during_time_period(df=df_emergency_activity,
+                                                                                date=date_cutoff,
+                                                                                num_weeks_to_subtract=weeks,
+                                                                                variable_name_prefix="ae_attendances_last_",
+                                                                                groupbycols=["patient_pseudo_id"]
+                                                                                )
 
         dataset_ae_attend = dataset_ae_attend.join(total_number_AE_in_period,
                                                    "patient_pseudo_id",

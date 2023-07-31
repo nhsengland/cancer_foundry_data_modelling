@@ -135,3 +135,24 @@ diagnosis_columns_opa = [
     "Secondary_Diagnosis_Code_22",
     "Secondary_Diagnosis_Code_23",
     ]
+
+list_columns_mortality = [
+    "patient_pseudo_id",
+    "reg_date_of_death",
+    "s_underlying_cod_icd10",
+    "s_cod_code_1",
+    "s_cod_code_2",
+    "s_cod_code_3",
+    "s_cod_code_4",
+    "s_cod_code_5",
+    "s_cod_code_6",
+    "s_cod_code_7",
+    "s_cod_code_8",
+    "s_cod_code_9",
+    "s_cod_code_10",
+    "s_cod_code_11",
+    "s_cod_code_12",
+    "s_cod_code_13",
+    "s_cod_code_14",
+    "s_cod_code_15",
+    ]

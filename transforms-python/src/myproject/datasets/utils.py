@@ -164,13 +164,14 @@ def number_symptom_calls_during_time_period(df,
 
     return symptom_count
 
-def number_OPA_during_time_period(df,
-                                  date: str,
-                                  num_weeks_to_subtract: int,
-                                  variable_name_prefix: str = "OPA_attendances_last_",
-                                  groupbycols: str = ["patient_pseudo_id"]):
+
+def number_attendances_during_time_period(df,
+                                          date: str,
+                                          num_weeks_to_subtract: int,
+                                          variable_name_prefix: str = "_attendances_last_",
+                                          groupbycols: str = ["patient_pseudo_id"]):
     """
-    Returns the number of outpatient attendances in the period between
+    Returns the number of attendances in the period between
     the given date - number_weeks_to_subtract until
     the latest data present in the dataset
     """
@@ -178,27 +179,23 @@ def number_OPA_during_time_period(df,
     df_limited = df.filter(F.col("attendance_date") >= F.lit(date_limit))
 
     col_alias = variable_name_prefix + str(num_weeks_to_subtract) + "_weeks"
-    total_number_OPA_in_period = df_limited.groupBy(groupbycols).count().withColumnRenamed("count", col_alias)
+    total_number_attendances_in_period = df_limited.groupBy(groupbycols).count().withColumnRenamed("count", col_alias)
 
-    return total_number_OPA_in_period
+    return total_number_attendances_in_period
 
-def number_AE_during_time_period(df,
-                                 date: str,
-                                 num_weeks_to_subtract: int,
-                                 variable_name_prefix: str = "AE_attendances_last_",
-                                 groupbycols: str = ["patient_pseudo_id"]):
+
+def add_n_weeks_from_date(original_date: str, num_weeks_to_subtract: int):
     """
-    Returns the number of emergency attendances in the period between
-    the given date - number_weeks_to_subtract until
-    the latest data present in the dataset
+    Given a date string in the format YYYY-mm-dd
+    subtract num_weeks_to_subtract weeks and
+    return the date in the same format
     """
-    date_limit = subtract_n_weeks_from_date(date, num_weeks_to_subtract)
-    df_limited = df.filter(F.col("attendance_date") >= F.lit(date_limit))
+    original_date_dt = datetime.datetime.strptime(original_date, "%Y-%m-%d")
+    later_date = original_date_dt + datetime.timedelta(weeks=num_weeks_to_subtract)
+    later_date = later_date.strftime("%Y-%m-%d")
 
-    col_alias = variable_name_prefix + str(num_weeks_to_subtract) + "_weeks"
-    total_number_AE_in_period = df_limited.groupBy(groupbycols).count().withColumnRenamed("count", col_alias)
+    return later_date
 
-    return total_number_AE_in_period
 
 def subtract_n_weeks_from_date(original_date: str, num_weeks_to_subtract: int):
     """

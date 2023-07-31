@@ -17,6 +17,8 @@ def compute(df_comorbidities):
     - all cancer diagnosis ICD10 codes post cut-off
     - the earliest and latest date of cancer diagnosis post cut-off date
     """
+    # columns
+    df_comorbidities = df_comorbidities.select("patient_pseudo_id", "date", "diagnosis")
 
     # Filter to time AFTER cut-off
     df_comorbidities = df_comorbidities.filter(F.col("date") > F.lit(date_cutoff))

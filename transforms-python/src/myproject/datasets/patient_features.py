@@ -1,34 +1,57 @@
 # from pyspark.sql import functions as F
-from transforms.api import transform_df, Input, Output
+from transforms.api import transform_df, Input, Output, configure
+from pyspark.sql.window import Window
 import pyspark.sql.functions as F
 from myproject.datasets import utils
 from myproject.datasets.config import (list_categorical_variables,
                                        list_boolean_variables,
                                        list_patient_health_record_variables,
-                                       list_categorical_variables_from_phr)
+                                       list_categorical_variables_from_phr,
+                                       list_columns_mortality)
+
+@configure(profile=['DRIVER_MEMORY_LARGE'])
 @transform_df(
     Output("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
     patient=Input("ri.foundry.main.dataset.b2a84252-8ae1-4f7c-9948-c7e00afe36a8"),
+    outcome_variable=Input("ri.foundry.main.dataset.30a5ce42-d7ca-4152-8ce3-7573fc39bfe2"),
+    mortality=Input("ri.foundry.main.dataset.b243b273-4b66-4326-a37b-8bc060c8bdf6"),
     dataset_111_calls=Input("ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"),
     patient_health_record_features=Input("ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"),
     comorbidity_features=Input("ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"),
-    cancer_diagnosis=Input("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/cancer_diagnosis"),
+    cancer_diagnosis=Input("ri.foundry.main.dataset.57b3da18-8389-4083-bb74-499bb3208f04"),
     ae_features=Input("ri.foundry.main.dataset.3b5c090a-bad0-4568-9163-d37a41c748e1"),
+    ip_features=Input("/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/IP_features"),
+    opa_features=Input("ri.foundry.main.dataset.f0e0629f-e190-40fa-a7c3-a95ce8d2fe6a")
 )
-def compute(patient, dataset_111_calls, ae_features, patient_health_record_features, comorbidity_features, cancer_diagnosis):
+def compute(patient, outcome_variable, mortality, dataset_111_calls, ae_features, ip_features, opa_features, patient_health_record_features, comorbidity_features, cancer_diagnosis):
     """
     Add features to the patient table from the Person Ontology
-    Features to be added: demographic, geographic, GP practice, A&E attendances
 
-    Merge features from 111 calls
-    Merge features from patient health record features
-    Merge features from AE features
-    Merge features from comorbidity features
-    Merge features from cancer_diagnosis
+    Merge outcome variable (cancer diagnosis after cut-off period)
+    Merge mortality data (date of death, cause of death etc)
+    Merge features from 111 calls (number of calls, symptoms of calls)
+    Merge features from patient health record features (long term condtions and some geographical variables)
+    Merge number of attendances features from AE, IP, OPA
+    Merge comorbidity features (flag based on ICD-10 codes and their timing)
+    Merge cancer_diagnosis (diagnoses prior to cut-off timepoint)
     """
-    # 111 CALLS
+    # Outcome variable
+    patient = patient.join(outcome_variable,
+                           "patient_pseudo_id",
+                           "left")
 
-    # left join 111 dataset
+    # MORTALITY
+    # get single mortality per ID
+
+    w_desc = Window.partitionBy("patient_pseudo_id").orderBy(F.col("activity_id").desc())
+    mortality_latest = mortality.withColumn("row", F.row_number().over(w_desc)).filter(F.col("row") == 1).drop("row")
+
+    # Merge mortality data
+    patient = patient.join(mortality_latest.select(list_columns_mortality),
+                           "patient_pseudo_id",
+                           "left")
+
+    # 111 calls
     patient = patient.join(dataset_111_calls,
                            "patient_pseudo_id",
                            "left")
@@ -38,16 +61,22 @@ def compute(patient, dataset_111_calls, ae_features, patient_health_record_featu
                            "patient_pseudo_id",
                            "left")
 
-    # cancer features
+    # Cancer features (Cancer diagnosis in past)
     patient = patient.join(cancer_diagnosis,
                            "patient_pseudo_id",
                            "left")
 
-    # A&E ATTENDANCES FEATURES
-
-    # left join A&E features
+    # A&E attendance features
 
     patient = patient.join(ae_features, "patient_pseudo_id", "left")
+
+    # IP attendance features
+
+    patient = patient.join(ip_features, "patient_pseudo_id", "left")
+
+    # OP attendance features
+
+    patient = patient.join(opa_features, "patient_pseudo_id", "left")
 
     # PATIENT HEALTH RECORD
 
@@ -89,8 +118,8 @@ def compute(patient, dataset_111_calls, ae_features, patient_health_record_featu
     # Converting boolean columns to binary columns
     for bool_variable in list_boolean_variables:
         patient = patient.withColumn(bool_variable + "_null_removed", F.when(F.col(bool_variable) == True, "True")
-                                                       .when(F.col(bool_variable) == False, "False")
-                                                       .otherwise("Unknown"))
+                                                                      .when(F.col(bool_variable) == False, "False")
+                                                                      .otherwise("Unknown"))
 
         expression_cols = utils.create_expressions_categorical_column(patient, col_name=bool_variable+"_null_removed")
         all_col_expressions = all_col_expressions + expression_cols
@@ -101,7 +130,7 @@ def compute(patient, dataset_111_calls, ae_features, patient_health_record_featu
         expression_cols = utils.create_expressions_categorical_column(patient, col_name=cat_variable+"_null_removed")
         all_col_expressions = all_col_expressions + expression_cols
 
-    # Select all columns and add the expressions for the binary columns to be created  
+    # Select all columns and add the expressions for the binary columns to be created 
     patient = patient.select(F.col("*"), *all_col_expressions)
 
     return patient

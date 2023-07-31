@@ -31,12 +31,12 @@ def compute(df_outpatient_with_diagnosis):
     # loop through "weeks_to_subtract". Calculate the number of attendances in each period. Merge to dataset_OPA_attend
     for weeks in weeks_to_subtract:
         # get the number of outpatient attendances in the specified period
-        total_number_OPA_in_period = utils.number_OPA_during_time_period(df=df_outpatient_with_diagnosis,
-                                                                         date=date_cutoff,
-                                                                         num_weeks_to_subtract=weeks,
-                                                                         variable_name_prefix="OPA_attendances_last_",
-                                                                         groupbycols=["patient_pseudo_id"]
-                                                                         )
+        total_number_OPA_in_period = utils.number_attendances_during_time_period(df=df_outpatient_with_diagnosis,
+                                                                                 date=date_cutoff,
+                                                                                 num_weeks_to_subtract=weeks,
+                                                                                 variable_name_prefix="OPA_attendances_last_",
+                                                                                 groupbycols=["patient_pseudo_id"]
+                                                                                 )
 
         dataset_opa_attend = dataset_opa_attend.join(total_number_OPA_in_period,
                                                      "patient_pseudo_id",
