@@ -5,7 +5,7 @@ from myproject.datasets import utils
 import re
 
 @transform_df(
-    Output("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/111_pathways_features"),
+    Output("ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"),
     source_df=Input("ri.foundry.main.dataset.a91f6452-b404-4ce3-b48a-7cafae278b7a"),
     cancer_symptoms=Input("ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8")
 )
@@ -14,6 +14,8 @@ def compute(source_df, cancer_symptoms):
     Create features from the 111 dataset
     The output from this transformation is later merged with the patient_features table
     """
+    #remove 999 calls and EDS calls
+    source_df = source_df.filter(F.col("site_type_id") == 2)
 
     # remove null IDs
     source_df = source_df.na.drop(subset=["patient_pseudo_id"])
