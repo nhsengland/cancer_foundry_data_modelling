@@ -3,6 +3,8 @@ date_cutoff = "2021-08-31"
 
 weeks_to_subtract = [4, 12, 26, 52, 260]
 
+target_weeks = [12, 26, 52, 78, 104, 260]
+
 # categorical variables from which to create binary variables in patient_features
 list_categorical_variables = [
     "gender",

@@ -6,34 +6,15 @@ from myproject.datasets import utils
 
 @configure(profile=['DRIVER_MEMORY_LARGE'])
 @transform_df(
-    Output("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/comorbidity_features"),
-    df_inpatient_comorbidities=Input("ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"),
-    df_outpatient_comorbidities=Input("ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"),
-    df_icd10_ref=Input("ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3")
+    Output("ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"),
+    df_comorbidities=Input("ri.foundry.main.dataset.3f34bfba-9440-4b7b-9d54-59be8a52bb0e"),
 )
-def compute(df_inpatient_comorbidities, df_outpatient_comorbidities, df_icd10_ref):
+def compute(df_comorbidities):
     """
-    Generate features from the comorbidities
+    Generate features from the combined comorbidities (inpatient, outpatient & A&E)
     For a given set of diagnoses, identify the first and last date when the diagnosis was made
     Create flags if the diagnosis was made in the last n weeks
     """
-
-    # Keep latest only
-    df_icd10_ref = df_icd10_ref.filter(F.col("effective_to").isNull())
-    df_icd10_ref = df_icd10_ref.filter(F.col("category_3_code").isNotNull())
-
-    # Union comorbidities
-    df_comorbidities = df_inpatient_comorbidities.unionByName(df_outpatient_comorbidities)
-
-    # Filter
-    df_comorbidities = df_comorbidities.select("patient_pseudo_id", "date", "diagnosis")
-
-    # remove null IDs
-    df_comorbidities = df_comorbidities.na.drop(subset=["patient_pseudo_id"])
-
-    # merge diagnoses with reference
-    df_comorbidities = df_comorbidities.join(df_icd10_ref, df_comorbidities.diagnosis == df_icd10_ref.alt_code, "left")
-
     # Filter to time before cut-off
     df_comorbidities = df_comorbidities.filter(F.col("date") < F.lit(date_cutoff))
 
