@@ -21,6 +21,11 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.30a5ce42-d7ca-4152-8ce3-7573fc39bfe2"
+- alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/patient_features_expanded"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
 - alias: "/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/patient_health_record_features"
   modes:
   - "BUILD"
@@ -59,6 +64,7 @@ mappings:
 - alias: "ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"
   modes:
   - "BUILD"
+  - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"
 - alias: "ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3"
