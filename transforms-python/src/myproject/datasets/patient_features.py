@@ -31,4 +31,11 @@ def compute(patient, outcome_variable, comorbidity_features, cancer_diagnosis):
     patient = patient.join(cancer_diagnosis,
                            "patient_pseudo_id",
                            "left")
+
+    columns_to_fill_na_with_0 = list(set(outcome_variable.columns + comorbidity_features.columns + cancer_diagnosis.columns))
+    columns_to_fill_na_with_0.remove("patient_pseudo_id")
+
+    # fill nulls with 0. This will ignore string columns
+    patient = patient.na.fill(value=0, subset=columns_to_fill_na_with_0)
+
     return patient

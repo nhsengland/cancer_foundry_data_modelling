@@ -19,6 +19,6 @@ def compute(df_comorbidities, df_icd10_ref):
     # identify cancer only, exclude non-melanoma skin cancer
     df_cancer_only = df_comorbidities.filter(F.col("diagnosis").like("C%") & ~F.col("diagnosis").like("C44%"))
 
-    df_cancer_only = utils.create_comorbidity_features(df_cancer_only.select("patient_pseudo_id", "date", "diagnosis"), "cancer")
+    df_cancer_only = utils.create_comorbidity_features(df_cancer_only.select("patient_pseudo_id", "date", "diagnosis"), "cancer_before_cut_off")
 
     return df_cancer_only

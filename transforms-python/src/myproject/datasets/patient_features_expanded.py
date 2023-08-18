@@ -80,6 +80,22 @@ def compute(patient, mortality, dataset_111_calls, ae_features, ip_features, opa
             patient_health_record_features_selected = patient_health_record_features_selected.withColumnRenamed(col,
                                                                                                                "phr_"+col)
 
+    # identify list of columns which will be filled with 0 after merging with the patient table
+    phr_columns_to_fill_with_0 = patient_health_record_features_selected.columns
+    non_binary_columns_phr = ["phr_date",
+                              "phr_date_of_birth",
+                              "phr_date_of_death",
+                              "phr_highest_acuity_segment_code",
+                              "phr_highest_acuity_segment_name",
+                              "phr_highest_acuity_segment_description",
+                              "phr_nhs_region_id",
+                              "phr_nhs_region_null_removed",
+                              "phr_stp_code_null_removed",
+                              ]
+
+    for non_binary_col in non_binary_columns_phr:
+        phr_columns_to_fill_with_0.remove(non_binary_col)
+
     # left join patient health record features tables
     patient = patient.join(patient_health_record_features_selected,
                            "patient_pseudo_id",
@@ -111,5 +127,13 @@ def compute(patient, mortality, dataset_111_calls, ae_features, ip_features, opa
 
     # Select all columns and add the expressions for the binary columns to be created 
     patient = patient.select(F.col("*"), *all_col_expressions)
+
+    # include the numerical columns from 111 calls, ae_features, ip_features, opa_features and selected from phr_columns to fill with 0
+    columns_to_fill_na_with_0 = list(set(dataset_111_calls.columns + ae_features.columns +
+                                         ip_features.columns + opa_features.columns + phr_columns_to_fill_with_0))
+    columns_to_fill_na_with_0.remove("patient_pseudo_id")
+
+    # fill nulls with 0. This will ignore string columns
+    patient = patient.na.fill(value=0, subset=columns_to_fill_na_with_0)
 
     return patient

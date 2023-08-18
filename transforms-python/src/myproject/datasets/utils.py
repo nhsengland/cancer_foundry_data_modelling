@@ -5,7 +5,7 @@ from myproject.datasets.config import date_cutoff, weeks_to_subtract
 import datetime
 
 
-def clean_column_of_strings(df, col_name: str, append_to_col_name: str = '_null_removed', fill_string: str = 'unknown'):
+def clean_column_of_strings(df, col_name: str, append_to_col_name: str = '_null_replaced', fill_string: str = 'unknown'):
     """
     Create a new column which duplicates a column of strings
     Replaces null and empty strings with a fill_string (e.g. unknown)
@@ -28,7 +28,10 @@ def create_expressions_categorical_column(df, col_name: str):
     return categories_exprs
 
 
-def clean_categorical_column_return_expressions(df, col_name: str,fill_string: str = 'unknown',append_to_col_name: str = '_null_removed'):
+def clean_categorical_column_return_expressions(df,
+                                                col_name: str,
+                                                fill_string: str = 'unknown',
+                                                append_to_col_name: str = '_null_replaced'):
     """
     First clean the categorical column (replacing null and emppty strings)
     Returns expression for the dummy variables
@@ -63,7 +66,6 @@ def create_comorbidity_features(df_specific_comorbidity, name_of_group):
     specific_comorbidity_feature = specific_comorbidity_first.join(specific_comorbidity_latest,
                                                                    ["patient_pseudo_id", name_of_group],
                                                                    "left")
-
 
     # make binary column
     specific_comorbidity_feature = specific_comorbidity_feature.withColumn(name_of_group+"_binary", F.lit(1))
