@@ -72,32 +72,36 @@ gradle_dist="gradle-7.6-bin.zip"
 
 if [ -z "${JEMMA:-}" ];
 then
-    git_remote="$(git config remote.origin.url)" && ret=$? || ret=$?
-    if [ $ret -ne 0 ]; then
-      echo "Warning: Git remote url not set."
-      if [ -z "${FOUNDRY_HOSTNAME:-}" ] || [ -z "${FOUNDRY_TOKEN:-}" ]; then
-        echo "Please ensure the following environment variables are set [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN]"
-        exit 1
-      else # git not configured, use provided environment
-          export GIT_REMOTE_HOST="${FOUNDRY_HOSTNAME}"
-          export GIT_REMOTE_USERNAME="${FOUNDRY_USERNAME}"
-          export GIT_REMOTE_PASSWORD="${FOUNDRY_TOKEN}"
-      fi
-    else # git remote configured, infer variables from it
-      # Extract the external hostname and bearer token from the git remote
-      # Assuming that Authoring generates a git remote of the
-      # form https://<user>:<token>@<hostname>:<port>/<path-to-repo>
-      strip_before_host="${git_remote#*@}"
-      git_host_and_port="${strip_before_host%%/*}"
+    if [ -n "${FOUNDRY_HOSTNAME:-}" ] && [ -n "${FOUNDRY_TOKEN:-}" ] && [ -n "${FOUNDRY_USERNAME:-}" ]; then
+        # Use the available environment variables if already present
+        echo "Environment variables [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN] are already set. Using them"
+        export GIT_REMOTE_HOST="${FOUNDRY_HOSTNAME}"
+        export GIT_REMOTE_USERNAME="${FOUNDRY_USERNAME}"
+        export GIT_REMOTE_PASSWORD="${FOUNDRY_TOKEN}"
+    else
+        echo "Environment variables [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN] are not set. Attempting to infer from Git remote url"
 
-      strip_after_userinfo="${git_remote%%@*}"
-      git_userinfo="${strip_after_userinfo#*//}"
-      git_username="${git_userinfo%%:*}"
-      git_password="${git_userinfo#*:}"
+        git_remote="$(git config remote.origin.url)" && ret=$? || ret=$?
+        if [ $ret -ne 0 ]; then
+            echo "Warning: Git remote url not set."
+            echo "Please ensure the following environment variables are set [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN]"
+            exit 1
+        else # git remote configured, infer variables from it
+            # Extract the external hostname and bearer token from the git remote
+            # Assuming that Authoring generates a git remote of the
+            # form https://<user>:<token>@<hostname>:<port>/<path-to-repo>
+            strip_before_host="${git_remote#*@}"
+            git_host_and_port="${strip_before_host%%/*}"
 
-      export GIT_REMOTE_HOST="${git_host_and_port}"
-      export GIT_REMOTE_USERNAME="${git_username}"
-      export GIT_REMOTE_PASSWORD="${git_password}"
+            strip_after_userinfo="${git_remote%%@*}"
+            git_userinfo="${strip_after_userinfo#*//}"
+            git_username="${git_userinfo%%:*}"
+            git_password="${git_userinfo#*:}"
+
+            export GIT_REMOTE_HOST="${git_host_and_port}"
+            export GIT_REMOTE_USERNAME="${git_username}"
+            export GIT_REMOTE_PASSWORD="${git_password}"
+        fi
     fi
 
     export ORG_GRADLE_PROJECT_externalUri="https://${GIT_REMOTE_HOST}"

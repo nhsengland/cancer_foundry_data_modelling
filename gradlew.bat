@@ -38,31 +38,42 @@ if "%JEMMA%" == "" (
     set git_remote=%%i
   )
 
-  call set strip_before_host=!git_remote:*@=!
+  if defined FOUNDRY_HOSTNAME (
+    if defined FOUNDRY_USERNAME (
+      if defined FOUNDRY_TOKEN (
+        echo "Environment variables [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN] are already set. Using them"
+        set GIT_REMOTE_HOST=%FOUNDRY_HOSTNAME%
+        set GIT_REMOTE_USERNAME=%FOUNDRY_USERNAME%
+        set GIT_REMOTE_PASSWORD=%FOUNDRY_TOKEN%
+      )
+    )
+  ) else (
+      echo "Environment variables [FOUNDRY_HOSTNAME, FOUNDRY_USERNAME, FOUNDRY_TOKEN] are not set. Attempting to infer from Git remote url"
+      call set strip_before_host=!git_remote:*@=!
 
-  call set _git_host_and_port_beg=%%strip_before_host:*/=%%
-  call set _git_host_and_port_end=%%strip_before_host:!_git_host_and_port_beg!=%%
-  call set git_host_and_port=!!_git_host_and_port_end:~0,-1!!
+      call set _git_host_and_port_beg=%%strip_before_host:*/=%%
+      call set _git_host_and_port_end=%%strip_before_host:!_git_host_and_port_beg!=%%
+      call set git_host_and_port=!!_git_host_and_port_end:~0,-1!!
 
-  call set _endpart=%%git_remote:*@=%%
-  call set _firstpart=%%git_remote:!_endpart!=%%
-  call set strip_after_userinfo=!!_firstpart:~0,-1!
+      call set _endpart=%%git_remote:*@=%%
+      call set _firstpart=%%git_remote:!_endpart!=%%
+      call set strip_after_userinfo=!!_firstpart:~0,-1!
 
-  call set git_userinfo=%%strip_after_userinfo:*//=%%
+      call set git_userinfo=%%strip_after_userinfo:*//=%%
 
-  call set git_password=!!git_userinfo:*:=!
-  call set _firstpart=%%git_userinfo:!git_password!=%%
-  call set git_username=!!_firstpart:~0,-1!
+      call set git_password=!!git_userinfo:*:=!
+      call set _firstpart=%%git_userinfo:!git_password!=%%
+      call set git_username=!!_firstpart:~0,-1!
 
-  set GIT_REMOTE_HOST=!git_host_and_port!
-  set GIT_REMOTE_USERNAME=!git_username!
-  set GIT_REMOTE_PASSWORD=!git_password!
+      set GIT_REMOTE_HOST=!git_host_and_port!
+      set GIT_REMOTE_USERNAME=!git_username!
+      set GIT_REMOTE_PASSWORD=!git_password!
+  )
 
-  @rem If not set, default to the URIs inferred from the git remote
-  set ORG_GRADLE_PROJECT_transformsMavenProxyRepoUri=https://!git_host_and_port!/artifacts/api/legacy/mrp/authz/all
-  set ORG_GRADLE_PROJECT_artifactsUri=https://!git_host_and_port!/artifacts/api
-  set ORG_GRADLE_PROJECT_externalUri=https://!git_host_and_port!
-  set ORG_GRADLE_PROJECT_transformsBearerToken=!git_password!
+  set ORG_GRADLE_PROJECT_transformsMavenProxyRepoUri=https://!GIT_REMOTE_HOST!/artifacts/api/legacy/mrp/authz/all
+  set ORG_GRADLE_PROJECT_artifactsUri=https://!GIT_REMOTE_HOST!/artifacts/api
+  set ORG_GRADLE_PROJECT_externalUri=https://!GIT_REMOTE_HOST!
+  set ORG_GRADLE_PROJECT_transformsBearerToken=!GIT_REMOTE_PASSWORD!
 
   set wrapperAuthGradleOptions=-Dgradle.wrapperUser=!GIT_REMOTE_USERNAME! -Dgradle.wrapperPassword=!GIT_REMOTE_PASSWORD!
 
