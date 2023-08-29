@@ -248,3 +248,44 @@ def create_long_list_diagnoses_from_activity(df_activity, array_column: str):
     df_comorbidity = df_comorbidity.filter(F.col("diagnosis") != "")
 
     return df_comorbidity
+
+
+def flag_if_patient_passed_away_with_cancer(df):
+    """
+    creates a binary column passed_away_with_cancer_cod which is 1 if any of the 
+    causes of death contain a cancer ICD10 code, and 0 if not
+    """
+    
+    return df.withColumn("passed_away_with_cancer_cod", 
+                        F.when( (F.col("s_underlying_cod_icd10").like("C%") & 
+                            ~F.col("s_underlying_cod_icd10").like("C44%")) |
+                            (F.col("s_cod_code_1").like("C%") &
+                            ~F.col("s_cod_code_1").like("C44%")) |
+                            (F.col("s_cod_code_2").like("C%") &
+                            ~F.col("s_cod_code_2").like("C44%")) |
+                            (F.col("s_cod_code_3").like("C%") &
+                            ~F.col("s_cod_code_3").like("C44%")) |
+                            (F.col("s_cod_code_4").like("C%") &
+                            ~F.col("s_cod_code_4").like("C44%")) |
+                            (F.col("s_cod_code_5").like("C%") &
+                            ~F.col("s_cod_code_5").like("C44%")) |
+                            (F.col("s_cod_code_6").like("C%") &
+                            ~F.col("s_cod_code_6").like("C44%")) |
+                            (F.col("s_cod_code_7").like("C%") &
+                            ~F.col("s_cod_code_7").like("C44%")) |
+                            (F.col("s_cod_code_8").like("C%") &
+                            ~F.col("s_cod_code_8").like("C44%")) |
+                            (F.col("s_cod_code_9").like("C%") &
+                            ~F.col("s_cod_code_9").like("C44%")) |
+                            (F.col("s_cod_code_10").like("C%") &
+                            ~F.col("s_cod_code_10").like("C44%")) |
+                            (F.col("s_cod_code_11").like("C%") &
+                            ~F.col("s_cod_code_11").like("C44%")) |
+                            (F.col("s_cod_code_12").like("C%") &
+                            ~F.col("s_cod_code_12").like("C44%")) |
+                            (F.col("s_cod_code_13").like("C%") &
+                            ~F.col("s_cod_code_13").like("C44%")) |
+                            (F.col("s_cod_code_14").like("C%") &
+                            ~F.col("s_cod_code_14").like("C44%")) |
+                            (F.col("s_cod_code_15").like("C%") &
+                            ~F.col("s_cod_code_15").like("C44%")), 1).otherwise(0)) 

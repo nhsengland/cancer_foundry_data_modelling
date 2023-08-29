@@ -6,7 +6,7 @@ from pyspark.sql.window import Window
 from myproject.datasets.config import list_categorical_variables_from_phr
 
 @transform_df(
-    Output("/NHS/cancer-late-presentation/cancer-late-datasets/interim-datasets/patient_health_record_features"),
+    Output("ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"),
     patient_health_record=Input("ri.foundry.main.dataset.bc82a106-d0b2-4837-9d46-1aabcb4db0d2"),
 )
 def compute(patient_health_record):
