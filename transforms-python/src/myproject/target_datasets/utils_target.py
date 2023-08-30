@@ -66,3 +66,80 @@ def generate_categories(df, base_col):
 def generate_binary_variables(df, base_col, category):
     categories_exprs = [F.when(F.col(base_col) == category, 1).otherwise(0).alias(base_col+"_"+category.replace(" ", "_"))]# for category in categories]
     return categories_exprs
+
+
+def create_stratification_crosstable(df, age_column, gender_column, target_column, name_stratification_column="category"):
+    """
+    Create a crosstable of all the combinations of age bucket, gender and target column
+    """
+    df_ages = df.select(age_column).distinct()
+    df_genders = df.select(gender_column).distinct()
+    df_target = df.select(target_column).distinct()
+
+    df_age_gender = df_ages.crossJoin(df_genders)
+    df_age_gender_target = df_age_gender.crossJoin(df_target)
+
+    df_age_gender_target = df_age_gender_target.withColumn(name_stratification_column, F.concat(F.col(age_column),
+                                                                                       F.lit("-"),
+                                                                                       F.col(gender_column),
+                                                                                       F.lit("-"),
+                                                                                       F.col(target_column)))
+
+    return df_age_gender_target
+
+
+def create_train_test_validation_column(patient,
+                                        stratify_column="category",
+                                        train_fraction=0.6,
+                                        test_fraction=0.2,
+                                        validation_fraction=0.2,
+                                        unique_col="patient_pseudo_id",
+                                        seed=0):
+    """
+    Create a new column called dataset which indicates if the row is assigned to train, test or validation
+    The proportions of the split can be set in the input parameters
+    """
+
+    # assigns the train_fraction to each of the unique values in stratify_column
+    train_fraction_dict = (
+        patient.select(stratify_column)
+        .distinct()
+        .withColumn("fraction", F.lit(train_fraction))
+        .rdd.collectAsMap()
+    )
+
+    df_train = patient.sampleBy(stratify_column, train_fraction_dict, seed)
+
+    # the dataset after train rows removed
+    df_remaining = patient.join(df_train, on=unique_col, how="left_anti")
+
+    # the validation fraction is recalculated to be relative to the remaining dataset
+    # e.g. if train is 0.6, and validation is 0.2, then the updated validation fraction would be 0.5
+    updated_validation_fraction = validation_fraction/(1 - train_fraction)
+
+    # Validation data
+    validation_fraction_dict = {
+        key: updated_validation_fraction for (_, key) in enumerate(train_fraction_dict)
+    }
+
+    df_val = df_remaining.sampleBy(stratify_column, validation_fraction_dict, seed)
+    df_remaining = df_remaining.join(df_val, on=unique_col, how="left_anti")
+
+    updated_test_fraction = test_fraction/(1 - train_fraction - validation_fraction)
+
+    # Test data
+    test_fraction_dict = {
+        key: updated_test_fraction for (_, key) in enumerate(train_fraction_dict)
+    }
+
+    df_test = df_remaining.sampleBy(stratify_column, test_fraction_dict, seed)
+
+    df_train = df_train.withColumn("dataset", F.lit("train"))
+    df_test = df_test.withColumn("dataset", F.lit("test"))
+    df_val = df_val.withColumn("dataset", F.lit("validate"))
+
+    # concatenate to create final table 
+    combine = df_train.unionByName(df_val)
+    combine = combine.unionByName(df_test)
+
+    return combine

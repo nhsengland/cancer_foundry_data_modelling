@@ -10,7 +10,10 @@ from myproject.target_datasets import utils_target
 )
 def compute(df_cancer_subset):  
     """ Maps variables to new categories, filters on required columns and creates binary columns
-    for the new categories"""
+    for the new categories
+
+    Add column for train test validation split
+    """
     dict_name = utils_target.rural_urban_dict
     dict_name_2 = utils_target.household_type_dict
     df_mapped_1 = utils_target.df_mapping(df_cancer_subset, "rural_urban_classification_null_removed", dict_name)
@@ -24,4 +27,34 @@ def compute(df_cancer_subset):
             df_categories = utils_target.generate_binary_variables(df_subset, col, cat_variable)
             all_categories = all_categories + df_categories
         patient = df_subset.select(F.col("*"), *all_categories)
+
+    # STRATIFIED SAMPLING
+
+    # add age bucket
+    patient = patient.withColumn("age_bucket",
+        F.when((F.col("age_clean") >= 40) & (F.col("age_clean") <50), "40-50")
+        .when((F.col("age_clean") >= 50) & (F.col("age_clean") <60), "50-60")
+        .when((F.col("age_clean") >= 60) & (F.col("age_clean") <70), "60-70")
+        .when((F.col("age_clean") >= 70) & (F.col("age_clean") <80), "70-80")
+        .when((F.col("age_clean") >= 80) & (F.col("age_clean") <90), "80-90")
+        .when((F.col("age_clean") >= 90), "90+")
+        .otherwise("other"))
+
+    # creating cross table with all the categories for stratification
+    df_age_gender_cancer = utils_target.create_stratification_crosstable(patient,
+                                                                         age_column="age_bucket",
+                                                                         gender_column="gender",
+                                                                         target_column="cancer_diagnosis_in_next_52_weeks",
+                                                                         name_stratification_column="category")
+
+    patient = patient.join(df_age_gender_cancer, ["age_bucket", "gender", "cancer_diagnosis_in_next_52_weeks"])
+
+    patient = utils_target.create_train_test_validation_column(patient,
+                                                               stratify_column="category",
+                                                               train_fraction=0.6,
+                                                               test_fraction=0.2,
+                                                               validation_fraction=0.2,
+                                                               unique_col="patient_pseudo_id",
+                                                               seed=0)
+
     return patient
