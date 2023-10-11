@@ -26,11 +26,31 @@ mappings:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
+- alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/stroke_diagnosis"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e6df5039-fd19-4b34-8dfd-85042cc5b24a"
+- alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/stroke_outcome_variable"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.f72e9326-395c-40f3-a56d-6d073b6f53a3"
 - alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/IDs_to_remove"
   modes:
   - "BUILD"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.b31e0565-7803-4729-8805-961db7279f07"
+- alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/patient_features_subset_stroke"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.16af93e4-536c-4d4e-83b6-2df608128fa6"
+- alias: "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/stroke_IDs_to_remove"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.bf97af2b-f0a0-408c-89bd-418517d879ce"
 - alias: "ri.foundry.main.dataset.00a2c97d-1499-4b4e-8cad-3af7cba8a599"
   modes:
   - "BUILD"
@@ -47,6 +67,11 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.10e87cda-7bbc-4d0c-a8b3-c2559b832dd3"
+- alias: "ri.foundry.main.dataset.16af93e4-536c-4d4e-83b6-2df608128fa6"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.16af93e4-536c-4d4e-83b6-2df608128fa6"
 - alias: "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
   modes:
   - "BUILD"
@@ -158,6 +183,11 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.bc82a106-d0b2-4837-9d46-1aabcb4db0d2"
+- alias: "ri.foundry.main.dataset.bf97af2b-f0a0-408c-89bd-418517d879ce"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.bf97af2b-f0a0-408c-89bd-418517d879ce"
 - alias: "ri.foundry.main.dataset.c12f6390-def6-4fa4-bb51-1e70e3ac1c20"
   modes:
   - "READ"
@@ -191,6 +221,11 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.e5ca6fce-6839-4b1d-801c-81e2e976c5bd"
+- alias: "ri.foundry.main.dataset.e6df5039-fd19-4b34-8dfd-85042cc5b24a"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.e6df5039-fd19-4b34-8dfd-85042cc5b24a"
 - alias: "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
   modes:
   - "READ"
@@ -202,6 +237,16 @@ mappings:
   - "READ"
   path: "/deprecated-field"
   rid: "ri.foundry.main.dataset.f0e0629f-e190-40fa-a7c3-a95ce8d2fe6a"
+- alias: "ri.foundry.main.dataset.f72e9326-395c-40f3-a56d-6d073b6f53a3"
+  modes:
+  - "READ"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.f72e9326-395c-40f3-a56d-6d073b6f53a3"
+- alias: "ri.foundry.main.dataset.f84bc6f9-fffe-4c38-afa4-911c5a515a08"
+  modes:
+  - "BUILD"
+  path: "/deprecated-field"
+  rid: "ri.foundry.main.dataset.f84bc6f9-fffe-4c38-afa4-911c5a515a08"
 - alias: "ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"
   modes:
   - "BUILD"
