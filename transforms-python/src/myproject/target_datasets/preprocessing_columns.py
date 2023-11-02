@@ -49,12 +49,13 @@ def compute(df_cancer_subset):
 
     patient = patient.join(df_age_gender_cancer, ["age_bucket", "gender", "cancer_diagnosis_in_next_52_weeks"])
 
+    # dataset column created which has train, validation, test label for each row  
     patient = utils_target.create_train_test_validation_column(patient,
-                                                               stratify_column="category",
                                                                train_fraction=0.6,
                                                                test_fraction=0.2,
                                                                validation_fraction=0.2,
                                                                unique_col="patient_pseudo_id",
+                                                               target_col="cancer_diagnosis_in_next_52_weeks",
                                                                seed=0)
 
     return patient
