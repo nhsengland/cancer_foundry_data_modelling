@@ -54,10 +54,10 @@ def compute(df_stroke_subset, stroke_post_cutoff):
     patient = patient.join(df_age_gender_cancer, ["age_bucket", "gender", "stroke_diagnosis_in_next_52_weeks"])
 
     patient = utils_target.create_train_test_validation_column(patient,
-                                                               stratify_column="category",
                                                                train_fraction=0.6,
                                                                test_fraction=0.2,
                                                                validation_fraction=0.2,
                                                                unique_col="patient_pseudo_id",
+                                                               target_col="stroke_diagnosis_in_next_52_weeks",
                                                                seed=0)
     return patient
