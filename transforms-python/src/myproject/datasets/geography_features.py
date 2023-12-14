@@ -11,6 +11,11 @@ from myproject.datasets.config import (geographical_variables)
     patient=Input("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3")
 )
 def compute(df_icb, df_cancer_alliance, patient):
+    """
+    Generate features containing the geogrpahic variables (cancer alliance, icb and LSOA)
+    Using mapping tables and the LSOA code for each patient from the patient table
+    The patient is mapped to the cancer alliance and icb which operates in that region
+    """
 
     # Joining the cancer alliance and icb datasets
     df = df_icb.join(df_cancer_alliance, df_cancer_alliance.LSOA11CD == df_icb.LSOA11CD, how='left').select(df_icb.LSOA11CD, df_icb.ICB22NM.alias('integrated_care_board'), df_cancer_alliance.CAL19NM.alias('cancer_alliance'))
