@@ -156,3 +156,8 @@ list_columns_mortality = [
     "s_cod_code_14",
     "s_cod_code_15",
     ]
+
+geographical_variables = [
+    "cancer_alliance",
+    "integrated_care_board"
+]
