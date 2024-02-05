@@ -161,3 +161,26 @@ geographical_variables = [
     "cancer_alliance",
     "integrated_care_board"
 ]
+
+list_tumour_sites = [
+    "head_and_neck_after_cut_off",
+    "gi_upper_and_lower_after_cut_off",
+    "lung_after_cut_off",
+    "sarcoma_after_cut_off",
+    "melanoma_after_cut_off",
+    "brain_and_cns_after_cut_off",
+    "breast_after_cut_off",
+    "gynae_after_cut_off",
+    "urology_after_cut_off",
+    "endocrine_after_cut_off",
+    "haematological_after_cut_off",
+    "unknown_after_cut_off",
+    "ovarian_after_cut_off",
+    "pancreatic_after_cut_off",
+    "bladder_after_cut_off",
+    "myeloma_after_cut_off",
+    "stomach_after_cut_off",
+    "oesophageal_after_cut_off",
+    "kidney_after_cut_off",
+    "lymphoma_after_cut_off"
+]

@@ -1,14 +1,16 @@
 from pyspark.sql import functions as F
 from transforms.api import transform_df, Input, Output, configure
 from myproject.target_datasets import utils_target
+from myproject.datasets.config import list_tumour_sites
 
 
 @configure(profile=['DRIVER_MEMORY_LARGE'])
 @transform_df(
     Output("ri.foundry.main.dataset.56032935-c25c-4262-8bd0-a8de9091ef85"),
     df_cancer_subset=Input("ri.foundry.main.dataset.00a2c97d-1499-4b4e-8cad-3af7cba8a599"),
+    df_outcome=Input("ri.foundry.main.dataset.7c022978-3bba-4a0b-8e5a-5ac4dec34ba7")
 )
-def compute(df_cancer_subset):  
+def compute(df_cancer_subset, df_outcome):  
     """ Maps variables to new categories, filters on required columns and creates binary columns
     for the new categories
 
@@ -57,5 +59,15 @@ def compute(df_cancer_subset):
                                                                unique_col="patient_pseudo_id",
                                                                target_col="cancer_diagnosis_in_next_52_weeks",
                                                                seed=0)
+
+    # adding tumour site columns to the dataset  
+    df_outcome = df_outcome.select(["patient_pseudo_id"]+list_tumour_sites)
+    
+    patient = patient.join(df_outcome, "patient_pseudo_id", "left")
+
+    columns_to_fill_na_with_0 = list_tumour_sites
+
+    # fill nulls with 0. This will ignore string columns
+    patient = patient.na.fill(value=0, subset=columns_to_fill_na_with_0)
 
     return patient
