@@ -18,11 +18,11 @@ list_categorical_variables = [
 
 # boolean variables from which to create binary variables in patient_features
 list_boolean_variables = [
-        "living_alone",
-        "living_with_young",
-        "living_with_elderly",
-        "private_outdoor_space",
-    ]
+    "living_alone",
+    "living_with_young",
+    "living_with_elderly",
+    "private_outdoor_space",
+]
 
 # categorical variables from which to create binary variables in patient_health_record_features
 list_categorical_variables_from_phr = [
@@ -102,12 +102,13 @@ list_patient_health_record_variables = [
     "severe_asthma",
     "cerebral_palsy",
     "other_chronic_neurological_diseases",
-    ]
+]
 # the ICD10 codes (using % magic character) for each grouping
 # Add multiple ICD10 codes to the list
-dict_icd10_groups = {"digestive_system_diseases": ["K%"],
-                     "family_history_cancer": ["Z80%"],
-                     }
+dict_icd10_groups = {
+    "digestive_system_diseases": ["K%"],
+    "family_history_cancer": ["Z80%"],
+}
 
 diagnosis_columns_opa = [
     "Primary_Diagnosis_Code",
@@ -134,7 +135,7 @@ diagnosis_columns_opa = [
     "Secondary_Diagnosis_Code_21",
     "Secondary_Diagnosis_Code_22",
     "Secondary_Diagnosis_Code_23",
-    ]
+]
 
 list_columns_mortality = [
     "patient_pseudo_id",
@@ -155,12 +156,9 @@ list_columns_mortality = [
     "s_cod_code_13",
     "s_cod_code_14",
     "s_cod_code_15",
-    ]
-
-geographical_variables = [
-    "cancer_alliance",
-    "integrated_care_board"
 ]
+
+geographical_variables = ["cancer_alliance", "integrated_care_board"]
 
 list_tumour_sites = [
     "head_and_neck_after_cut_off",
@@ -182,5 +180,5 @@ list_tumour_sites = [
     "stomach_after_cut_off",
     "oesophageal_after_cut_off",
     "kidney_after_cut_off",
-    "lymphoma_after_cut_off"
+    "lymphoma_after_cut_off",
 ]
