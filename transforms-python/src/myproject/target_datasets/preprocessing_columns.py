@@ -1,7 +1,6 @@
 from pyspark.sql import functions as F
 from transforms.api import transform_df, Input, Output, configure
 from myproject.target_datasets import utils_target
-from myproject.datasets.config import list_tumour_sites
 
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
@@ -10,9 +9,9 @@ from myproject.datasets.config import list_tumour_sites
     df_cancer_subset=Input(
         "ri.foundry.main.dataset.00a2c97d-1499-4b4e-8cad-3af7cba8a599"
     ),
-    df_outcome=Input("ri.foundry.main.dataset.7c022978-3bba-4a0b-8e5a-5ac4dec34ba7"),
+    df_outcome_tumour_site=Input("ri.foundry.main.dataset.7c022978-3bba-4a0b-8e5a-5ac4dec34ba7"),
 )
-def compute(df_cancer_subset, df_outcome):
+def compute(df_cancer_subset, df_outcome_tumour_site):
     """Maps variables to new categories, filters on required columns and creates binary columns
     for the new categories
 
@@ -81,11 +80,18 @@ def compute(df_cancer_subset, df_outcome):
     )
 
     # adding tumour site columns to the dataset
-    df_outcome = df_outcome.select(["patient_pseudo_id"] + list_tumour_sites)
+    # only bring through flags (e.g. cancer_diagnosis_in_next_12_weeks_lung)
+    all_outcome_tumour_site_columns = df_outcome_tumour_site.columns
+    selected_outcome_tumour_site_columns = []
+    for col in all_outcome_tumour_site_columns:
+        if "cancer_diagnosis_in_next_" in col:
+            selected_outcome_tumour_site_columns.append(col)
 
-    patient = patient.join(df_outcome, "patient_pseudo_id", "left")
+    df_outcome_tumour_site = df_outcome_tumour_site.select(["patient_pseudo_id"] + selected_outcome_tumour_site_columns)
 
-    columns_to_fill_na_with_0 = list_tumour_sites
+    patient = patient.join(df_outcome_tumour_site, "patient_pseudo_id", "left")
+
+    columns_to_fill_na_with_0 = selected_outcome_tumour_site_columns
 
     # fill nulls with 0. This will ignore string columns
     patient = patient.na.fill(value=0, subset=columns_to_fill_na_with_0)
