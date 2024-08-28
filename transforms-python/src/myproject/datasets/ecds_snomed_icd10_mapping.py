@@ -5,10 +5,10 @@ from pyspark.sql.window import Window
 
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/ecds_snomed_icd10_mapping"
+        ecds_snomed_mapping_output
     ),
-    df_ecds_etos=Input("ri.foundry.main.dataset.2341ae73-65bc-405f-a1c7-e644da6e0255"),
-    df_udal_map=Input("ri.foundry.main.dataset.2a792e6d-170e-4f42-8093-2db225060034"),
+    df_ecds_etos=Input(ecds_etos_mapping_input),
+    df_udal_map=Input(udal_icd10_mapping_input),
 )
 def compute(df_ecds_etos, df_udal_map):
     """
