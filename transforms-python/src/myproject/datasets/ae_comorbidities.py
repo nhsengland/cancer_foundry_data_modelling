@@ -5,13 +5,9 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.cf9cd953-d9c4-486f-9130-607c252ed8e1"),
-    df_ae_activity=Input(
-        "ri.foundry.main.dataset.0cc8c784-f957-47b5-9844-a69d7eee0f6a"
-    ),
-    df_ecds_mapping=Input(
-        "ri.foundry.main.dataset.cb2b417b-98d0-4d94-b492-6380de39776e"
-    ),
+    Output(ae_diagnosis_path),
+    df_ae_activity=Input(ae_activity_path),
+    df_ecds_mapping=Input(ecds_path),
 )
 def compute(df_ae_activity, df_ecds_mapping):
     """

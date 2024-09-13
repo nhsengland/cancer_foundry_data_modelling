@@ -6,11 +6,9 @@ import re
 
 
 @transform_df(
-    Output("ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"),
-    source_df=Input("ri.foundry.main.dataset.a91f6452-b404-4ce3-b48a-7cafae278b7a"),
-    cancer_symptoms=Input(
-        "ri.foundry.main.dataset.e6f4ebc3-9175-4bd4-9ab0-550b011abde8"
-    ),
+    Output(output_111_path),
+    source_df=Input(input_111_path),
+    cancer_symptoms=Input(cancer_symptoms_path),
 )
 def compute(source_df, cancer_symptoms):
     """

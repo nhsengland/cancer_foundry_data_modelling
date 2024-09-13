@@ -5,18 +5,18 @@ from transforms.api import transform_df, Input, Output, configure
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/combined_comorbidities"
+        combined_comorbidities_path
     ),
     df_inpatient_comorbidities=Input(
-        "ri.foundry.main.dataset.fe042d45-d081-4221-ae22-b930587fb500"
+        inpatient_comorbidites_path
     ),
     df_outpatient_comorbidities=Input(
-        "ri.foundry.main.dataset.fa19d9b5-066a-4d57-aef4-59d2cda4a8ac"
+        outpatient_comorbidities_path
     ),
     df_ae_comorbidities=Input(
-        "ri.foundry.main.dataset.cf9cd953-d9c4-486f-9130-607c252ed8e1"
+        ae_comorbidities_path
     ),
-    df_icd10_ref=Input("ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3"),
+    df_icd10_ref=Input(icd10_ref_path),
 )
 def compute(
     df_inpatient_comorbidities,

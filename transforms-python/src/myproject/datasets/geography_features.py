@@ -5,12 +5,11 @@ from myproject.datasets.config import geographical_variables
 
 
 @transform_df(
-    Output("ri.foundry.main.dataset.690ca66d-8f76-4a55-a38d-88eccc7c635a"),
-    df_icb=Input("ri.foundry.main.dataset.784e6c3d-73d5-4688-ba4d-71462830a421"),
+    Output(geographical_variables_path),
+    df_icb=Input(icb_path),
     df_cancer_alliance=Input(
-        "ri.foundry.main.dataset.69f813f6-f075-440d-af8a-e48dcf94495c"
-    ),
-    patient=Input("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
+        cancer_alliance_path ),
+    patient=Input(patient_record_path),
 )
 def compute(df_icb, df_cancer_alliance, patient):
     """

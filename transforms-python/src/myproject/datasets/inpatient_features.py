@@ -7,10 +7,10 @@ from myproject.datasets import utils
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/IP_features"
+        inpatient_features_path
     ),
     inpatient_activity=Input(
-        "ri.foundry.main.dataset.793b42d6-f24d-4cca-b500-abc319dd5162"
+        inpatient_activity_path
     ),
 )
 def compute(inpatient_activity):

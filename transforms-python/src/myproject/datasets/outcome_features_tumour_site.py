@@ -5,9 +5,9 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.7c022978-3bba-4a0b-8e5a-5ac4dec34ba7"),
+    Output(outcome_variable_by_type_path),
     df_comorbidities=Input(
-        "ri.foundry.main.dataset.3f34bfba-9440-4b7b-9d54-59be8a52bb0e"
+        combined_comorbidities_path
     ),
 )
 def compute(df_comorbidities):

@@ -8,13 +8,13 @@ from myproject.datasets import utils
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/IDs_to_remove"
+        ids_to_remove_path
     ),
     patient_features_expanded=Input(
-        "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
+        patient_features_expanded_path
     ),
     cancer_diagnosis=Input(
-        "ri.foundry.main.dataset.57b3da18-8389-4083-bb74-499bb3208f04"
+        cancer_diagnosis_path
     ),
 )
 def compute(patient_features_expanded, cancer_diagnosis):

@@ -6,9 +6,9 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.f0e0629f-e190-40fa-a7c3-a95ce8d2fe6a"),
+    Output(outpatient_features_path),
     df_outpatient_with_diagnosis=Input(
-        "ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"
+        outpatient_diagnosis_path
     ),
 )
 def compute(df_outpatient_with_diagnosis):

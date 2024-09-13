@@ -6,9 +6,9 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.3b5c090a-bad0-4568-9163-d37a41c748e1"),
+    Output(output_ae_path),
     df_emergency_activity=Input(
-        "ri.foundry.main.dataset.0cc8c784-f957-47b5-9844-a69d7eee0f6a"
+        input_emergency_activity_path
     ),
 )
 def compute(df_emergency_activity):
