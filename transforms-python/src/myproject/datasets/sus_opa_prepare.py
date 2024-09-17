@@ -7,18 +7,18 @@ import pyspark.sql.functions as F
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.c3f3cfb4-0e3b-44e1-a1c4-a10c0c463ae2"),
+    Output(sus_opa_combined_path),
     df_opa_diag_2008_2020=Input(
-        "ri.foundry.main.dataset.10e87cda-7bbc-4d0c-a8b3-c2559b832dd3"
+        opa_diagnosis_2008_2020_path
     ),
     df_opa_diag_2021=Input(
-        "ri.foundry.main.dataset.c12f6390-def6-4fa4-bb51-1e70e3ac1c20"
+        opa_diagnosis_2021_path
     ),
     df_opa_diag_2022=Input(
-        "ri.foundry.main.dataset.e5ca6fce-6839-4b1d-801c-81e2e976c5bd"
+        opa_diagnosis_2022_path
     ),
     df_opa_diag_2023=Input(
-        "ri.foundry.main.dataset.5ce08265-84ab-4d90-a38a-df31e47ecb47"
+        opa_diagnosis_2023_path
     ),
 )
 def compute(

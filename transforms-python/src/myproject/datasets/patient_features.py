@@ -4,16 +4,16 @@ from transforms.api import transform_df, Input, Output, configure
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
-    patient=Input("ri.foundry.main.dataset.b2a84252-8ae1-4f7c-9948-c7e00afe36a8"),
+    Output(patient_features_path),
+    patient=Input(patient_record_path),
     outcome_variable=Input(
-        "ri.foundry.main.dataset.30a5ce42-d7ca-4152-8ce3-7573fc39bfe2"
+        outcome_variable_path
     ),
     comorbidity_features=Input(
-        "ri.foundry.main.dataset.7525a5d9-610c-4927-8cc4-fa12d3a17c4c"
+       comorbidities_features_path
     ),
     cancer_diagnosis=Input(
-        "ri.foundry.main.dataset.57b3da18-8389-4083-bb74-499bb3208f04"
+        cancer_diagnosis_path
     ),
 )
 def compute(patient, outcome_variable, comorbidity_features, cancer_diagnosis):

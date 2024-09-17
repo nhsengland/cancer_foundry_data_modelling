@@ -6,9 +6,9 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output(output_ae_path),
+    Output(ae_path),
     df_emergency_activity=Input(
-        input_emergency_activity_path
+        emergency_activity_path
     ),
 )
 def compute(df_emergency_activity):

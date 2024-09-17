@@ -7,9 +7,9 @@ from myproject.datasets.config import list_categorical_variables_from_phr
 
 
 @transform_df(
-    Output("ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"),
+    Output(patient_health_record_features_path),
     patient_health_record=Input(
-        "ri.foundry.main.dataset.bc82a106-d0b2-4837-9d46-1aabcb4db0d2"
+        patient_health_record_path
     ),
 )
 def compute(patient_health_record):

@@ -6,7 +6,7 @@ import re
 
 
 @transform_df(
-    Output(output_111_path),
+    Output(features_111_path),
     source_df=Input(input_111_path),
     cancer_symptoms=Input(cancer_symptoms_path),
 )

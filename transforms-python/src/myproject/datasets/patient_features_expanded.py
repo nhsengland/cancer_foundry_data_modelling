@@ -15,21 +15,21 @@ from myproject.datasets.config import (
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/patient_features_expanded"
+        patient_features_expanded_path
     ),
-    patient=Input("ri.foundry.main.dataset.36644003-34c3-43d0-bace-751b3e071ea3"),
-    mortality=Input("ri.foundry.main.dataset.b243b273-4b66-4326-a37b-8bc060c8bdf6"),
+    patient=Input(patient_record_path),
+    mortality=Input(mortality_path),
     dataset_111_calls=Input(
-        "ri.foundry.main.dataset.a3dfadbc-b022-4d88-98c2-8ee3392beed1"
+        input_111_calls
     ),
     patient_health_record_features=Input(
-        "ri.foundry.main.dataset.195dd683-e55b-450e-abeb-5f00de85ad78"
+        patient_health_record_path
     ),
-    ae_features=Input("ri.foundry.main.dataset.3b5c090a-bad0-4568-9163-d37a41c748e1"),
+    ae_features=Input(ae_path),
     ip_features=Input(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/IP_features"
+         inpatient_features_path
     ),
-    opa_features=Input("ri.foundry.main.dataset.f0e0629f-e190-40fa-a7c3-a95ce8d2fe6a"),
+    opa_features=Input(outpatient_features_path),
 )
 def compute(
     patient,

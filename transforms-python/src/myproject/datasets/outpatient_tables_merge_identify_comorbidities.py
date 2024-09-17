@@ -8,10 +8,10 @@ from pyspark.sql.types import StringType
 @transform_df(
     Output("ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"),
     df_sus_opa_raw_unioned=Input(
-        "ri.foundry.main.dataset.c3f3cfb4-0e3b-44e1-a1c4-a10c0c463ae2"
+        sus_opa_raw_unioned_path
     ),
     outpatient_activity=Input(
-        "ri.foundry.main.dataset.4725c357-f053-498d-9113-127bde5edc55"
+        outpatient_acitivity_path
     ),
 )
 def compute(df_sus_opa_raw_unioned, outpatient_activity):
