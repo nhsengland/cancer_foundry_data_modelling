@@ -5,15 +5,19 @@ from myproject.target_datasets import utils_target
 
 @configure(profile=["NUM_EXECUTORS_8", "DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.f84bc6f9-fffe-4c38-afa4-911c5a515a08"),
+    Output(stroke_target_path),
     df_stroke_subset=Input(
-        "ri.foundry.main.dataset.16af93e4-536c-4d4e-83b6-2df608128fa6"
+        patient_features_stroke_path
     ),
     stroke_post_cutoff=Input(
-        "ri.foundry.main.dataset.f72e9326-395c-40f3-a56d-6d073b6f53a3"
+        stroke_outcome_variable_path
     ),
 )
 def compute(df_stroke_subset, stroke_post_cutoff):
+    """
+    Combining the outcome variable and stroke subset of patient features
+    to create the stroke target dataset
+    """
     dict_name = utils_target.rural_urban_dict
     dict_name_2 = utils_target.household_type_dict
     df_mapped_1 = utils_target.df_mapping(

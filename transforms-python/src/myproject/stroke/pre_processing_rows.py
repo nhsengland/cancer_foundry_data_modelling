@@ -7,13 +7,13 @@ from myproject.datasets import utils
 @configure(profile=["NUM_EXECUTORS_8", "DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/patient_features_subset_stroke"
+        patient_features_stroke_path
     ),
     patient_features_expanded=Input(
-        "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
+        patient_features_expanded_path
     ),
     df_ids_to_remove=Input(
-        "ri.foundry.main.dataset.bf97af2b-f0a0-408c-89bd-418517d879ce"
+        ids_to_remove_path
     ),
 )
 def compute(patient_features_expanded, df_ids_to_remove):

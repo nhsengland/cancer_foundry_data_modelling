@@ -7,12 +7,12 @@ from myproject.datasets import utils
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/stroke_diagnosis"
+        stroke_diagnosis_path
     ),
     df_comorbidities=Input(
-        "ri.foundry.main.dataset.3f34bfba-9440-4b7b-9d54-59be8a52bb0e"
+        combined_comorbidities_path
     ),
-    df_icd10_ref=Input("ri.foundry.main.dataset.3a0dfe4b-67de-4001-87eb-e43405df76d3"),
+    df_icd10_ref=Input(icd10_ref_path),
 )
 def compute(df_comorbidities, df_icd10_ref):
     """

@@ -7,10 +7,10 @@ from pyspark.sql.window import Window
 
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/interim-datasets/stroke_outcome_variable"
+        stroke_outcome_variable_path
     ),
     df_comorbidities=Input(
-        "ri.foundry.main.dataset.3f34bfba-9440-4b7b-9d54-59be8a52bb0e"
+         combined_comorbidities_path
     ),
 )
 def compute(df_comorbidities):

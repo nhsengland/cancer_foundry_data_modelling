@@ -8,13 +8,13 @@ from myproject.datasets import utils
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
     Output(
-        "/NHS/Cancer Late Presentation Likelihood Modelling Internal Transforms/cancer-late-datasets/target-datasets/stroke_IDs_to_remove"
+        stroke_ids_to_remove_path
     ),
     patient_features_expanded=Input(
-        "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
+        patient_features_expanded_path
     ),
     stroke_diagnosis=Input(
-        "ri.foundry.main.dataset.e6df5039-fd19-4b34-8dfd-85042cc5b24a"
+        stroke_diagnosis_path
     ),
 )
 def compute(patient_features_expanded, stroke_diagnosis):
