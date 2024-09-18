@@ -6,12 +6,12 @@ from myproject.datasets import utils
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.00a2c97d-1499-4b4e-8cad-3af7cba8a599"),
+    Output(patient_subsets_path),
     patient_features_expanded=Input(
-        "ri.foundry.main.dataset.8e0a3764-c7b6-4e43-80f0-84139cf8ff6c"
+        patient_features_expanded_path
     ),
     df_ids_to_remove=Input(
-        "ri.foundry.main.dataset.b31e0565-7803-4729-8805-961db7279f07"
+        ids_to_remove_path
     ),
 )
 def compute(patient_features_expanded, df_ids_to_remove):

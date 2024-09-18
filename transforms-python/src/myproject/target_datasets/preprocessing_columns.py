@@ -5,11 +5,11 @@ from myproject.target_datasets import utils_target
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.56032935-c25c-4262-8bd0-a8de9091ef85"),
+    Output(cancer_target_dataset_path),
     df_cancer_subset=Input(
-        "ri.foundry.main.dataset.00a2c97d-1499-4b4e-8cad-3af7cba8a599"
+        patient_subset_path
     ),
-    df_outcome_tumour_site=Input("ri.foundry.main.dataset.7c022978-3bba-4a0b-8e5a-5ac4dec34ba7"),
+    df_outcome_tumour_site=Input(outcome_variable_by_type_path),
 )
 def compute(df_cancer_subset, df_outcome_tumour_site):
     """Maps variables to new categories, filters on required columns and creates binary columns

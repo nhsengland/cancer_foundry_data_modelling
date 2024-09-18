@@ -6,7 +6,7 @@ from pyspark.sql.types import StringType
 
 @configure(profile=["DRIVER_MEMORY_LARGE"])
 @transform_df(
-    Output("ri.foundry.main.dataset.e3a5741d-6cb5-4b64-8d3b-0be26b1b6e62"),
+    Output(outpatient_combined_path),
     df_sus_opa_raw_unioned=Input(
         sus_opa_raw_unioned_path
     ),
