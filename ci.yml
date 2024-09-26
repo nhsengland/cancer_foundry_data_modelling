@@ -1,0 +1,132 @@
+# DO NOT MODIFY OR DELETE THIS FILE.
+#
+# ANY CHANGES MAY RESULT IN SERIOUS DAMAGE
+# TO THE TECHNICAL INFRASTRUCTURE AND LOSS OF DATA!
+#
+# ACCESS TO OR USE OF PALANTIR FOUNDRY IS SUBJECT
+# TO PALANTIR’S TECHNICAL SPECIFICATIONS AVAILABLE
+# IN THE DOCUMENTATION. THIS WARNING CONSTITUTES AN
+# ADDITION TO THOSE TECHNICAL SPECIFICATIONS AND
+# NON-COMPLIANCE MAY CONSTITUTE A VIOLATION OF
+# THE FOUNDRY LICENSE AGREEMENT.
+
+java-version: java_17
+
+env:
+  transformsGradleDistributionUrl:
+    uri-role: gradle-distribution-7-6
+  ORG_GRADLE_PROJECT_transformsBuildUriV2:
+    uri-role: build2-api
+  ORG_GRADLE_PROJECT_transformsCompassUri:
+    uri-role: compass-api
+  ORG_GRADLE_PROJECT_transformsJemmaUri:
+    uri-role: jemma-api
+  ORG_GRADLE_PROJECT_condaInstallerUri:
+    uri-role: conda-installer
+  ORG_GRADLE_PROJECT_condaInstallerUriPy2:
+    uri-role: conda-installer8-py2
+  ORG_GRADLE_PROJECT_condaInstallerUriPy3:
+    uri-role: conda-installer8-py3
+  ORG_GRADLE_PROJECT_condaInstallerUriPy3Mamba:
+    uri-role: conda-installer8-py3mamba
+  ORG_GRADLE_PROJECT_mambaInstaller:
+    uri-role: mamba-installer2
+  ORG_GRADLE_PROJECT_mambaInstaller3:
+    uri-role: mamba-installer3
+  ORG_GRADLE_PROJECT_mambaInstaller8:
+    uri-role: mamba-installer8
+  ORG_GRADLE_PROJECT_transformsCondaRepositoryProxyApiUri:
+    uri-role: conda-repository-proxy-authz-api
+  ORG_GRADLE_PROJECT_transformsCondaRepositoryProxyPublicRepoUri:
+    uri-role: conda-repository-proxy-authz-public
+  ORG_GRADLE_PROJECT_transformsDataHealthUri:
+    uri-role: data-health-api
+  ORG_GRADLE_PROJECT_artifactsUri:
+    uri-role: foundry-artifacts-api
+  ORG_GRADLE_PROJECT_transformsCatalogUri:
+    uri-role: foundry-catalog-api
+  ORG_GRADLE_PROJECT_flinkClusterManagerUri:
+    uri-role: flink-cluster-manager-api
+  ORG_GRADLE_PROJECT_foundryMlUri:
+    uri-role: foundry-ml-api
+  ORG_GRADLE_PROJECT_modelsUri:
+    uri-role: models-api
+  ORG_GRADLE_PROJECT_mioUri:
+    uri-role: mio-api
+  ORG_GRADLE_PROJECT_transformsSchemaUri:
+    uri-role: foundry-metadata-api
+  ORG_GRADLE_PROJECT_jemmaLogReceiverUri:
+    uri-role: log-receiver-api-jemma-alias
+  ORG_GRADLE_PROJECT_transformsMavenProxyRepoUri:
+    uri-role: maven-repository-proxy-authz
+  ORG_GRADLE_PROJECT_transformsShrinkwrapServiceUri:
+    uri-role: shrinkwrap-service-api
+  ORG_GRADLE_PROJECT_sparkConfigurationServiceUri:
+    uri-role: spark-configuration-service-api
+  ORG_GRADLE_PROJECT_transformsStreamCatalogUri:
+    uri-role: stream-catalog-api
+  ORG_GRADLE_PROJECT_foundryTelemetryServiceUri:
+    uri-role: foundry-telemetry-service-api
+  ORG_GRADLE_PROJECT_magritteCoordinatorUri:
+    uri-role: magritte-coordinator-api
+  ORG_GRADLE_PROJECT_magritteCoordinatorCiUri:
+    uri-role: magritte-coordinator-ci-api
+  ORG_GRADLE_PROJECT_stemmaGit:
+    uri-role: stemma-git
+  ORG_GRADLE_PROJECT_transformsWorkerUri:
+    uri-role: transforms-worker-api
+  FOUNDRYTS_CODEX_HUB_URIS:
+    uri-role: codex-hub-api
+
+required-job-token-capabilities:
+  - transforms
+
+jobs:
+  foundry-publish:
+    timeout: 20 minutes
+    steps:
+    - |
+      set -euo pipefail
+
+      unset SUDO_UID SUDO_GID SUDO_USER
+
+      [[ -n "${JAVA_HOME-}" && -d "$JAVA_HOME" ]] || {
+          echo "JAVA_HOME was not set or did not point to a valid directory."
+          exit 1
+      }
+      export JAVA_OPTS="-Xmx512m -Djavax.net.ssl.trustStore=${STEMMA_DEFAULT_TRUST_STORE_PATH} -Dfile.encoding=UTF8 --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED"
+      export ORG_GRADLE_PROJECT_transformsTrustStore="${STEMMA_DEFAULT_TRUST_STORE_PATH}"
+      export ORG_GRADLE_PROJECT_transformsBearerToken="${JOB_TOKEN}"
+      export ORG_GRADLE_PROJECT_transformsRepoRid="${REPOSITORY_RID}"
+      export ORG_GRADLE_PROJECT_clonedArtifactsRepoRid="${CLONED_ARTIFACTS_REPOSITORY_RID}"
+      export ORG_GRADLE_PROJECT_transformsMavenProxyRepoUri="${ORG_GRADLE_PROJECT_artifactsUri}/repositories/${REPOSITORY_RID}/contents/migration/maven"
+      export GRADLE_OPTS="-Dgradle.wrapperUser='' -Dgradle.wrapperPassword=${JOB_TOKEN}"
+      export ORG_GRADLE_PROJECT_autoConfigureBackingRepositories="true"
+      export ORG_GRADLE_PROJECT_branchIsProtected=${JEMMA_IS_PROTECTED_BRANCH:-"false"}
+
+      if [ -z ${JEMMA_BRANCH+x} ]; then
+        echo "The JEMMA_BRANCH variable is unset. We cannot publish without a branch, so please make sure that \
+      we are on a branch. If you are attempting to tag transforms repository, that is not supported and your transforms \
+      will always run latest commit on a given branch."
+        exit 1
+      fi
+
+      condaLocksVersion=1
+      condaLocksMinVersion=${JEMMA_CONDA_LOCKS_MIN_VERSION:-0}
+      if [ "$condaLocksVersion" -ge "$condaLocksMinVersion" ];
+      then
+        export ORG_GRADLE_PROJECT_applyCondaLocksPatch="true";
+      fi
+
+      if ! grep -q condaSolveImplementation gradle.properties;
+      then
+        mambaFlagVersion=1
+        mambaMinVersion=${JEMMA_MAMBA_MIN_VERSION:-1}
+        if [ "$mambaFlagVersion" -ge "$mambaMinVersion" ];
+        then
+          export ORG_GRADLE_PROJECT_condaSolveImplementation="mamba"
+        fi
+      fi
+
+      # For more detailed output from CI checks, add "--info" to the end of the "./gradlew" command below.
+      ./gradlew --no-daemon --build-cache --stacktrace patch publish
